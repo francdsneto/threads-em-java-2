@@ -25,13 +25,11 @@ public class ClienteTarefas {
                     while(teclado.hasNextLine())
                     {
                         String linha = teclado.nextLine();
-
-                        if(linha.trim().equals(""))
+                        saida.println(linha);
+                        if(linha.trim().equalsIgnoreCase("sair"))
                         {
                             break;
                         }
-
-                        saida.println(linha);
                     }
 
                     saida.close();

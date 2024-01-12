@@ -5,10 +5,11 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class DistribuirTarefas implements Runnable {
-    private final Socket socket;
+    private ServidorTarefas servidor;
+    private Socket socket;
 
-    public DistribuirTarefas(Socket socket
-    ) {
+    public DistribuirTarefas(ServidorTarefas servidor, Socket socket) {
+        this.servidor = servidor;
         this.socket = socket;
     }
 
@@ -27,6 +28,11 @@ public class DistribuirTarefas implements Runnable {
                 switch (comando) {
                     case "c1", "c2", "c3": {
                         respostaServidor.println("Comando "+comando+" recebido");
+                        break;
+                    }
+                    case "sair" : {
+                        respostaServidor.println("Desligando o servidor");
+                        servidor.parar();
                         break;
                     }
                     default: {
