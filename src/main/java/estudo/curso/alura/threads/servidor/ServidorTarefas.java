@@ -20,6 +20,7 @@ public class ServidorTarefas {
             System.out.println("Aceitando novo cliente na porta " + socket.getPort());
 
             DistribuirTarefas distribuirTarefas = new DistribuirTarefas(socket);
+
             /**
              * Ao usar o Executors para criar um Thread Pool, não se cria mais a Thread manualmente
              * mas passa o Runnable para o threadPool
@@ -29,8 +30,6 @@ public class ServidorTarefas {
 
             threadPool.execute(distribuirTarefas);
         }
-
-
 
     }
 
