@@ -6,22 +6,23 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServidorTarefas {
 
     private ServerSocket servidor;
     private ExecutorService threadPool;
-    private boolean estaRodando;
+    private AtomicBoolean estaRodando;
 
     public ServidorTarefas() throws IOException {
         System.out.println("--- Iniciando Servidor ---");
         this.servidor = new ServerSocket(12345);
         this.threadPool = Executors.newCachedThreadPool();
-        this.estaRodando = true;
+        this.estaRodando = new AtomicBoolean(true);
     }
 
     public void rodar() throws IOException {
-        while (this.estaRodando)
+        while (this.estaRodando.get())
         {
             try {
                 Socket socket = servidor.accept();
@@ -37,7 +38,7 @@ public class ServidorTarefas {
     }
 
     public void parar() throws IOException {
-        this.estaRodando = false;
+        this.estaRodando.set(false);
         this.servidor.close();
         this.threadPool.shutdown();
     }
