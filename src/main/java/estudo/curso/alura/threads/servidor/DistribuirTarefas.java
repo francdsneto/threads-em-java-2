@@ -3,6 +3,7 @@ package estudo.curso.alura.threads.servidor;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -10,11 +11,13 @@ public class DistribuirTarefas implements Runnable {
     private ServidorTarefas servidor;
     private Socket socket;
     private ExecutorService threadPool;
+    private final BlockingQueue<String> fila;
 
-    public DistribuirTarefas(ServidorTarefas servidor, Socket socket, ExecutorService threadPool) {
+    public DistribuirTarefas(ServidorTarefas servidor, Socket socket, ExecutorService threadPool, BlockingQueue<String> fila) {
         this.servidor = servidor;
         this.socket = socket;
         this.threadPool = threadPool;
+        this.fila = fila;
     }
 
     @Override
@@ -47,6 +50,11 @@ public class DistribuirTarefas implements Runnable {
 
                         break;
                     }
+                    case "c3" : {
+                        this.fila.put(comando);  //bloqueia
+                        respostaServidor.println("Comando C3 adicionado na fila");
+                        break;
+                    }
                     case "sair" : {
                         respostaServidor.println("Desligando o servidor");
                         servidor.parar();
@@ -58,7 +66,8 @@ public class DistribuirTarefas implements Runnable {
                     }
                 }
 
-                System.out.println(comando);
+                System.out.println("Comando recebido " + comando);
+
             }
 
             entradaCliente.close();
